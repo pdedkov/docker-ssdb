@@ -2,12 +2,13 @@ FROM debian:latest
 
 MAINTAINER Pavel E. Dedkov <pavel.dedkov@gmail.com>
 
+# install 
 RUN apt-get update && \
-	apt-get install -y --force-yes git make gcc g++ && \ 
-	apt-get clean && \
+	apt-get install -y --force-yes git make gcc g++ autoconf libjemalloc-dev && \ 
 	git clone --recursive https://github.com/ideawu/ssdb.git ssdb && \
 	cd ssdb && make && make install && cp ssdb-server /usr/bin && cp ssdb.conf /etc && cd .. && yes | rm -r ssdb
 
+# configure
 RUN mkdir -p /var/lib/ssdb && \
   sed \
     -e 's@home.*@home /var/lib@' \
@@ -19,6 +20,10 @@ RUN mkdir -p /var/lib/ssdb && \
     -e 's@port:.*@16379@' \
     -i /etc/ssdb.conf
 
+# clear
+RUN apt-get remove --purge -y --force-yes git make gcc g++ autoconf libjemalloc-dev && \
+apt-get autoclean && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && cd .. && rm -rf ssdb
+ 
 ENV TZ Europe/Moscow
 EXPOSE 16379
 VOLUME /var/lib/ssdb

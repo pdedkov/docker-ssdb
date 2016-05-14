@@ -6,7 +6,7 @@ MAINTAINER Pavel E. Dedkov <pavel.dedkov@gmail.com>
 RUN apt-get update && \
 	apt-get install -y --force-yes git make gcc g++ autoconf libjemalloc-dev && \ 
 	git clone --recursive https://github.com/ideawu/ssdb.git ssdb && \
-	cd ssdb && make && make install && cp ssdb-server /usr/bin && cp ssdb.conf /etc && cd .. && yes | rm -r ssdb
+	cd ssdb && make && make install && cp ssdb-server /usr/bin && cp ssdb.conf /etc && cd .. && rm -rf ssdb
 
 # configure
 RUN mkdir -p /var/lib/ssdb && \
@@ -22,7 +22,7 @@ RUN mkdir -p /var/lib/ssdb && \
 
 # clear
 RUN apt-get remove --purge -y --force-yes git make gcc g++ autoconf libjemalloc-dev && \
-apt-get autoclean && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && cd .. && rm -rf ssdb
+apt-get autoclean && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
  
 ENV TZ Europe/Moscow
 EXPOSE 16379

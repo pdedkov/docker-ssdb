@@ -22,7 +22,7 @@ RUN mkdir -p /var/lib/ssdb && \
 
 # clear
 RUN apt-get remove --purge -y --force-yes git make gcc g++ autoconf libjemalloc-dev && \
-apt-get autoclean && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+apt-get autoremove -y && apt-get autoclean && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
  
 ENV TZ Europe/Moscow
 EXPOSE 16379
